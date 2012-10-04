@@ -10,7 +10,7 @@ class ModuleLoader(BaseModuleLoader):
     name = 'Configuration Interface Module'
 
     def menu(self):
-        from cbpos.mod.config.pages import MainConfigPage
+        from cbpos.mod.config.views import MainConfigPage
             
         return [[],
                 [{'parent': 'System', 'label': 'Configuration', 'page': MainConfigPage, 'image': self.res('images/menu-configuration.png')}]]
@@ -41,12 +41,12 @@ class ModuleLoader(BaseModuleLoader):
 
     def do_load_config(self):
         # Prompt the user to change database configuration
-        from .dialogs import DatabaseConfigDialog
+        from cbpos.mod.config.views.dialogs import DatabaseConfigDialog
         win = DatabaseConfigDialog()
         cbpos.ui.window = win
     
     def do_load_raw(self):
         # Prompt the user to change raw configuration data
-        from .dialogs import RawConfigDialog
+        from cbpos.mod.config.views.dialogs import RawConfigDialog
         win = RawConfigDialog()
         cbpos.ui.window = win
