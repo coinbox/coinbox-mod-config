@@ -13,7 +13,7 @@ class ModuleLoader(BaseModuleLoader):
         from cbpos.mod.config.views import MainConfigPage
             
         return [[],
-                [{'parent': 'System', 'label': 'Configuration', 'page': MainConfigPage, 'image': self.res('images/menu-configuration.png')}]]
+                [{'parent': 'System', 'label': 'Configuration', 'page': MainConfigPage, 'image': cbpos.res.config('images/menu-configuration.png')}]]
     
     def argparser(self):
         parser1 = cbpos.subparsers.add_parser('config', description="Run qtPos database configuration")
