@@ -27,7 +27,7 @@ class MainConfigPage(QtGui.QWidget):
         self.populate()
     
     def populate(self):
-        for mod in cbpos.modules.all():
+        for mod in cbpos.modules.all_loaders():
             try:
                 pages = mod.config_pages()
             except AttributeError:
