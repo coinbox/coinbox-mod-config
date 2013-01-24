@@ -10,10 +10,17 @@ class ModuleLoader(BaseModuleLoader):
     name = 'Configuration Interface Module'
 
     def menu(self):
+        from cbpos.interface import MenuItem
         from cbpos.mod.config.views import MainConfigPage
-            
-        return [[],
-                [{'parent': 'System', 'label': 'Configuration', 'page': MainConfigPage, 'image': cbpos.res.config('images/menu-configuration.png')}]]
+        
+        return [
+                [],
+                [MenuItem('configuration', parent='system',
+                          label=cbpos.tr.config._('Configuration'),
+                          icon=cbpos.res.config('images/menu-configuration.png'),
+                          page=MainConfigPage)
+                 ]
+                ]
     
     def argparser(self):
         parser1 = cbpos.subparsers.add_parser('config', description="Run qtPos database configuration")
@@ -30,6 +37,12 @@ class ModuleLoader(BaseModuleLoader):
         dispatcher.connect(self.do_load_config, signal='ui-post-init', sender=dispatcher.Any)
         cbpos.break_init()
     
+    def do_load_config(self):
+        # Prompt the user to change database configuration
+        from cbpos.mod.config.views.dialogs import DatabaseConfigDialog
+        win = DatabaseConfigDialog()
+        cbpos.ui.window = win
+    
     def load_raw_config(self, args):
         cbpos.use_translation(False)
         cbpos.load_database(False)
@@ -38,12 +51,6 @@ class ModuleLoader(BaseModuleLoader):
         
         cbpos.break_init()
         dispatcher.connect(self.do_load_raw, signal='ui-post-init', sender=dispatcher.Any)
-
-    def do_load_config(self):
-        # Prompt the user to change database configuration
-        from cbpos.mod.config.views.dialogs import DatabaseConfigDialog
-        win = DatabaseConfigDialog()
-        cbpos.ui.window = win
     
     def do_load_raw(self):
         # Prompt the user to change raw configuration data
