@@ -1,8 +1,8 @@
 from pydispatch import dispatcher
-import logging
-logger = logging.getLogger(__name__)
 
 import cbpos
+logger = cbpos.get_logger(__name__)
+
 from cbpos.modules import BaseModuleLoader
 
 class ModuleLoader(BaseModuleLoader):
