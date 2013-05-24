@@ -254,7 +254,7 @@ class DriverForm(QtGui.QWidget):
         if field in ('host', 'username', 'password', 'database', 'query'):
             return self.rows[field]["widget"].text()
         elif field == 'port':
-            return str(self.rows["port"]["widget"].value())
+            return unicode(self.rows["port"]["widget"].value())
 
     def setProfile(self, profile):
         if profile.driver != self.driver:
