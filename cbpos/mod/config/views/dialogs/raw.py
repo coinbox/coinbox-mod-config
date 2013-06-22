@@ -1,6 +1,7 @@
 from PySide import QtCore, QtGui
 
 import cbpos
+import sys
 
 class RawConfigDialog(QtGui.QMainWindow):
     
@@ -101,11 +102,32 @@ class SectionTab(QtGui.QWidget):
         
     def initUI(self):
         self.rows = []
-        for option_name, option_value in self.section:
-            field = QtGui.QLineEdit()
-            field.setText(option_value)
+        for option_name, option_value in self.section.iteritems():
+            tp = None
+            if isinstance(option_value, (str, unicode)):
+                tp = str
+                field = QtGui.QLineEdit()
+                field.setText(option_value)
+            elif isinstance(option_value, bool):
+                tp = bool
+                field = QtGui.QCheckBox()
+                field.setChecked(option_value)
+            elif isinstance(option_value, (int, float)):
+                tp = int
+                field = QtGui.QDoubleSpinBox()
+                field.setRange(-sys.maxint, sys.maxint)
+                field.setValue(option_value)
+            elif isinstance(option_value, (list, tuple)):
+                tp = list
+                field = QtGui.QLineEdit()
+                field.setText(','.join(option_value))
+            else:
+                tp = None
+                field = QtGui.QLineEdit()
+                field.setText(repr(option_value))
+                field.setEnabled(False)
             btn = QtGui.QPushButton("-")
-            row = [option_name, field, btn]
+            row = [option_name, type(option_value), field, btn]
             btn.pressed.connect(lambda r=row: self.onRemoveButton(r))
             self.rows.append(row)
 
@@ -114,14 +136,25 @@ class SectionTab(QtGui.QWidget):
 
         for row in self.rows:
             layout = QtGui.QHBoxLayout()
-            [layout.addWidget(f) for f in row[1:]]
+            [layout.addWidget(f) for f in row[2:]]
             form.addRow(row[0], layout)
         self.setLayout(form)
     
     def save(self):
-        for option_name, field, btn in self.rows:
+        for option_name, tp, field, btn in self.rows:
             if not field.isEnabled(): continue
-            self.section[option_name] = field.text()
+            if tp is str:
+                self.section[option_name] = field.text()
+            elif tp is bool:
+                self.section[option_name] = field.isChecked()
+            elif tp is int:
+                self.section[option_name] = field.value()
+            elif tp is list:
+                self.section[option_name] = field.text().split(',')
+            else:
+                # TODO: what should we do with these?
+                #self.section[option_name] = eval(field.text())
+                pass
     
     def onRemoveButton(self, row):
         option_name, field, btn = row
