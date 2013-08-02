@@ -104,8 +104,8 @@ class SectionTab(QtGui.QWidget):
         self.rows = []
         for option_name, option_value in self.section.iteritems():
             tp = None
-            if isinstance(option_value, (str, unicode)):
-                tp = str
+            if isinstance(option_value, basestring):
+                tp = unicode
                 field = QtGui.QLineEdit()
                 field.setText(option_value)
             elif isinstance(option_value, bool):
@@ -118,9 +118,16 @@ class SectionTab(QtGui.QWidget):
                 field.setRange(-sys.maxint, sys.maxint)
                 field.setValue(option_value)
             elif isinstance(option_value, (list, tuple)):
-                tp = list
                 field = QtGui.QLineEdit()
-                field.setText(','.join(option_value))
+                try:
+                    field.setText(','.join(option_value))
+                except TypeError:
+                    # Not a list of strings
+                    field.setText(','.join(repr(v) for v in option_value))
+                    field.setEnabled(False)
+                    tp = None
+                else:
+                    tp = list
             else:
                 tp = None
                 field = QtGui.QLineEdit()
@@ -143,7 +150,7 @@ class SectionTab(QtGui.QWidget):
     def save(self):
         for option_name, tp, field, btn in self.rows:
             if not field.isEnabled(): continue
-            if tp is str:
+            if tp is unicode:
                 self.section[option_name] = field.text()
             elif tp is bool:
                 self.section[option_name] = field.isChecked()
