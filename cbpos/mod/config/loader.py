@@ -38,7 +38,7 @@ class ModuleLoader(BaseModuleLoader):
         # Prompt the user to change database configuration
         from cbpos.mod.config.views.dialogs import DatabaseConfigDialog
         win = DatabaseConfigDialog()
-        cbpos.ui.window = win
+        cbpos.ui.set_main_window(win)
     
     def run_raw_config(self, args):
         cbpos.use_translation(False)
@@ -54,4 +54,4 @@ class ModuleLoader(BaseModuleLoader):
         # Prompt the user to change raw configuration data
         from cbpos.mod.config.views.dialogs import RawConfigDialog
         win = RawConfigDialog()
-        cbpos.ui.window = win
+        cbpos.ui.set_main_window(win)
