@@ -164,7 +164,7 @@ class SectionTab(QtGui.QWidget):
                 pass
     
     def onRemoveButton(self, row):
-        option_name, field, btn = row
+        option_name, tp, field, btn = row
         self.section[option_name] = None
         field.setEnabled(False)
         btn.setEnabled(False)
