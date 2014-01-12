@@ -8,7 +8,7 @@ from cbpos.modules import BaseModuleLoader
 class ModuleLoader(BaseModuleLoader):
     def menu(self):
         from cbpos.interface import MenuItem
-        from cbpos.mod.config.views import MainConfigPage
+        from cbmod.config.views import MainConfigPage
         
         return [
                 [],
@@ -36,7 +36,7 @@ class ModuleLoader(BaseModuleLoader):
     
     def do_run_config(self):
         # Prompt the user to change database configuration
-        from cbpos.mod.config.views.dialogs import DatabaseConfigDialog
+        from cbmod.config.views.dialogs import DatabaseConfigDialog
         win = DatabaseConfigDialog()
         cbpos.ui.set_main_window(win)
     
@@ -52,6 +52,6 @@ class ModuleLoader(BaseModuleLoader):
     
     def do_run_raw_config(self):
         # Prompt the user to change raw configuration data
-        from cbpos.mod.config.views.dialogs import RawConfigDialog
+        from cbmod.config.views.dialogs import RawConfigDialog
         win = RawConfigDialog()
         cbpos.ui.set_main_window(win)
