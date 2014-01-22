@@ -3,6 +3,8 @@ from PySide import QtCore, QtGui
 import cbpos
 import sys
 
+logger = cbpos.get_logger(__name__)
+
 class RawConfigDialog(QtGui.QMainWindow):
     
     def __init__(self):
@@ -134,7 +136,7 @@ class SectionTab(QtGui.QWidget):
                 field.setText(repr(option_value))
                 field.setEnabled(False)
             btn = QtGui.QPushButton("-")
-            row = [option_name, type(option_value), field, btn]
+            row = [option_name, tp, field, btn]
             btn.pressed.connect(lambda r=row: self.onRemoveButton(r))
             self.rows.append(row)
 
@@ -159,9 +161,11 @@ class SectionTab(QtGui.QWidget):
             elif tp is list:
                 self.section[option_name] = field.text().split(',')
             else:
+                logger.warn("Option %s was not saved because type %s"
+                            " is not supported", repr(option_name),
+                            repr(tp))
                 # TODO: what should we do with these?
                 #self.section[option_name] = eval(field.text())
-                pass
     
     def onRemoveButton(self, row):
         option_name, tp, field, btn = row
