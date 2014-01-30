@@ -13,7 +13,7 @@ class ModuleLoader(BaseModuleLoader):
         return [
                 [],
                 [MenuItem('configuration', parent='system',
-                          label=cbpos.tr.config._('Configuration'),
+                          label=cbpos.tr.config_('Configuration'),
                           icon=cbpos.res.config('images/menu-configuration.png'),
                           page=MainConfigPage)
                  ]
