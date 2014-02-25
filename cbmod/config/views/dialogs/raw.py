@@ -11,6 +11,7 @@ class RawConfigDialog(QtGui.QMainWindow):
         super(RawConfigDialog, self).__init__()
         
         self.mainWidget = MainWidget()
+        self.mainWidget.populate()
         
         self.setCentralWidget(self.mainWidget)
         
@@ -23,7 +24,6 @@ class MainWidget(QtGui.QWidget):
         super(MainWidget, self).__init__()
         
         self.initUI()
-        self.populate()
         
     def initUI(self):
         self.tabs = QtGui.QTabWidget(self)

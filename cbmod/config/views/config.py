@@ -2,7 +2,9 @@ from PySide import QtGui
 
 import cbpos
 
-class MainConfigPage(QtGui.QWidget):
+from cbmod.base.views import BasePage
+
+class MainConfigPage(BasePage):
     def __init__(self):
         super(MainConfigPage, self).__init__()
         
@@ -23,8 +25,6 @@ class MainConfigPage(QtGui.QWidget):
         layout.addWidget(buttonBox)
         
         self.setLayout(layout)
-        
-        self.populate()
     
     def populate(self):
         for mod in cbpos.modules.all_loaders():
