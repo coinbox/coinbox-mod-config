@@ -54,3 +54,17 @@ class ModuleLoader(BaseModuleLoader):
         from cbmod.config.views.dialogs import RawConfigDialog
         win = RawConfigDialog()
         cbpos.ui.chain_window(win, cbpos.ui.PRIORITY_FIRST_HIGHEST)
+    
+    def first_run_wizard_pages(self):
+        from cbmod.base.views.wizard import WizardPageCollection
+        from cbmod.config.views.wizard import DatabaseInfoWizardPage, DatabaseProfileConfigWizardPage, DatabaseSetupWizardPage
+        
+        class Wizards(WizardPageCollection):
+            pages = (DatabaseInfoWizardPage, DatabaseProfileConfigWizardPage, DatabaseSetupWizardPage)
+            priority = WizardPageCollection.PRIORITY_FIRST_HIGH
+            
+            def handle_instances(self, pages):
+                pages[0].configPageId = pages[1].pageId
+                pages[0].setupPageId = pages[2].pageId
+        
+        return Wizards()
