@@ -27,31 +27,30 @@ class ModuleLoader(BaseModuleLoader):
         parser2.set_defaults(handle=self.run_raw_config)
 
     def run_config(self, args):
-        cbpos.load_database(False)
-        cbpos.load_menu(False)
-        logger.info('Running configuration...')
+        logger.info('Running database configuration...')
+        
+        cbpos.loader.autoload_database(False)
+        cbpos.loader.autoload_interface(False)
         
         dispatcher.connect(self.do_run_config, signal='ui-post-init', sender=dispatcher.Any)
-        cbpos.break_init()
     
     def do_run_config(self):
         # Prompt the user to change database configuration
         from cbmod.config.views.dialogs import DatabaseConfigDialog
         win = DatabaseConfigDialog()
-        cbpos.ui.set_main_window(win)
+        cbpos.ui.chain_window(win, cbpos.ui.PRIORITY_FIRST_HIGHEST)
     
     def run_raw_config(self, args):
-        cbpos.use_translation(False)
-        cbpos.load_database(False)
-        cbpos.load_menu(False)
         logger.info('Running raw configuration...')
         
-        cbpos.break_init()
-        dispatcher.connect(self.do_run_raw_config, signal='ui-post-init',
-                           sender=dispatcher.Any)
+        cbpos.loader.autoload_translation(False)
+        cbpos.loader.autoload_database(False)
+        cbpos.loader.autoload_interface(False)
+        
+        dispatcher.connect(self.do_run_raw_config, signal='ui-post-init', sender=dispatcher.Any)
     
     def do_run_raw_config(self):
         # Prompt the user to change raw configuration data
         from cbmod.config.views.dialogs import RawConfigDialog
         win = RawConfigDialog()
-        cbpos.ui.set_main_window(win)
+        cbpos.ui.chain_window(win, cbpos.ui.PRIORITY_FIRST_HIGHEST)
